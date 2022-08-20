@@ -19,11 +19,6 @@ pipeline {
             }
         }
 
-        stage ('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
         stage ("Build and Push docker image") {
             steps {
                 sh 'mvn clean install'
