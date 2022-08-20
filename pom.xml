@@ -19,7 +19,8 @@
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 		<docker.image.prefix>qpay</docker.image.prefix>
 		<docker.image.tag>1.0.0</docker.image.tag>
-		<spotify.version>1.2.2</spotify.version>
+		<!--<spotify.version>1.2.2</spotify.version>-->
+		<fabric8.version>0.40.0</fabric8.version>
 	</properties>
 
 	<dependencies>
@@ -120,26 +121,56 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>com.spotify</groupId>
+				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>${spotify.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build</goal>
-						</goals>
-					</execution>
-				</executions>
+				<version>${fabric8.version}</version>
 				<configuration>
-					<imageName>${docker.image.prefix}:${docker.image.tag}</imageName>
-					 <dockerDirectory>src/main/docker</dockerDirectory>
-					<resources>
+					<registry>registry.hub.docker.com/mkhuseli</registry>
+					<images>
+						<image>
+							<name>${docker.image.prefix}:${docker.image.tag}</name>
+							<alias>quantum-pay</alias>
+							<build>
+								<dockerFileDir>${project.basedir}</dockerFileDir>
+							</build>
+							<run>
+								<namingStrategy>alias</namingStrategy>
+								<ports>
+									<port>8082:8082</port>
+								</ports>
+							</run>
+
+						</image>
+					</images>
+                   <authConfig>
+					   <username>mkhuseli</username>
+					   <password>mkhululityhobeka</password>
+				   </authConfig>
+					<!--<resources>
 						<resource>
 							<directory>${project.build.directory}</directory>
 							<include>${project.build.finalName}.jar</include>
 						</resource>
-					</resources>
+					</resources>-->
 				</configuration>
+				<executions>
+					<execution>
+						<id>start</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+							<goal>build</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>push</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
