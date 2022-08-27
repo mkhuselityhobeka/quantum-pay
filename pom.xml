@@ -125,8 +125,7 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>${fabric8.version}</version>
 				<configuration>
-					<dockerHost>tcp://192.168.8.126:2375</dockerHost>
-
+					<dockerHost>registry.hub.docker.com/mkhuseli</dockerHost>
 					<registry>registry.hub.docker.com/mkhuseli</registry>
 					<images>
 						<image>
