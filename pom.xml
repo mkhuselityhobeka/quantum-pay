@@ -125,7 +125,7 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>${fabric8.version}</version>
 				<configuration>
-					<dockerHost>npipe:////./pipe/docker_engine</dockerHost>
+					<dockerHost>tcp:///var/run/docker.sock</dockerHost>
 					<registry>registry.hub.docker.com/mkhuseli</registry>
 					<images>
 						<image>
