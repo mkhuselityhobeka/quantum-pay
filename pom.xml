@@ -161,6 +161,7 @@
 						<goals>
 							<goal>stop</goal>
 							<goal>build</goal>
+							<goal>start</goal>
 						</goals>
 					</execution>
 					<execution>
