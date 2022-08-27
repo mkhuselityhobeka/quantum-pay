@@ -21,7 +21,7 @@ pipeline {
 
         stage ("Build and Push docker image") {
             steps {
-                sh 'mvn fabric8:build -Dfabric8.build.jib=true'
+                sh 'mvn clean install'
             }
         }
      }
