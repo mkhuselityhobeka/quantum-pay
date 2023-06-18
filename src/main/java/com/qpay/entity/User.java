@@ -22,6 +22,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NonNull
     private String username;
     @NonNull
     private String firstname;
@@ -34,6 +35,7 @@ public class User {
     @NonNull
     private String password;
     private String lastlogon;
+    private String idNumber;
     @JsonIgnore
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "id",orphanRemoval = true)

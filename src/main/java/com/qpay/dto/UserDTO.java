@@ -8,6 +8,7 @@ import java.util.List;
 @Component
 @Data
 @NoArgsConstructor@AllArgsConstructor
+@Builder
 public class UserDTO {
 
     private Long id;
@@ -18,5 +19,6 @@ public class UserDTO {
     private String status;
     private String password;
     private String lastlogon;
+    private String idNumber;
     private List<RolesDTO>rolesDTO;
 }

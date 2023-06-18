@@ -9,24 +9,28 @@ import com.qpay.mapper.UserMapperImpl;
 import com.qpay.repository.RolesRepo;
 import com.qpay.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.dozer.DozerBeanMapper;
+//import org.dozer.DozerBeanMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@Qualifier("UserRepoImpl")
 @Slf4j
 public class UserService{
 
     private UserRepo userRepo;
     private  RolesRepo rolesRepo;
-    private DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
+    //private DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
     private User user;
     private UserDTO userDTO;
-    private List<Roles> roles;
+    private List<Roles> roles = new ArrayList<>();
     private List<RolesDTO> rolesDTO;
     private RolesDTO roleDTO;
     private Roles role;
@@ -50,16 +54,13 @@ public class UserService{
     //create user
     public UserDTO createUser(UserDTO userDTO) {
 
+
         user = userMapper.UserDTOtoUser(userDTO);
         roles = userMapper.RolesDTOtoRoles(userDTO.getRolesDTO());
-        log.debug("inside create" + userDTO);
         String username = user.getUsername();
-        if (findByUsername(username)){
-        } else {
-            roles.forEach(role -> role.setUser(user));
-            roles.forEach(role -> user.setRoles(roles));
-            user = userRepo.save(user);
-        }
+        roles.forEach(role -> role.setUser(user));
+        roles.forEach(role -> user.setRoles(roles));
+         user = userRepo.save(user);
         rolesDTO = userMapper.RolesToRolesDTO(roles);
         userDTO = userMapper.UserToUserDTO(user);
         userDTO.setRolesDTO(rolesDTO);
@@ -78,7 +79,7 @@ public class UserService{
     //find user by username
     public UserDTO findUserByUsername(String username){
         user = userRepo.findByUsername(username);
-        log.debug("user is" + user);
+       // log.debug("user is" + user);
         if(user == null){
             throw new ResourceNotFoundException(User.class,"username", username);
 
@@ -147,10 +148,10 @@ public class UserService{
     @Transactional
     public UserDTO updateUser(UserDTO userDTO) {
 
-                log.debug("user dto " + userDTO);
-                log.debug("roles dto  " + userDTO.getRolesDTO());
+               // log.debug("user dto " + userDTO);
+               // log.debug("roles dto  " + userDTO.getRolesDTO());
                 roles = userMapper.RolesDTOtoRoles(userDTO.getRolesDTO());
-                log.debug("roles   " + roles.toString());
+               // log.debug("roles   " + roles.toString());
                User users  = userRepo.findByUsername(userDTO.getUsername());
               if(userRepo.findById(users.getId()).isPresent()){
 

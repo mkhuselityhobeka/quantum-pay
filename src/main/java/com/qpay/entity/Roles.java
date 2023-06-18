@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.lang3.builder.HashCodeExclude;
+//import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -25,4 +25,5 @@ public class Roles {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User user;
+
 }

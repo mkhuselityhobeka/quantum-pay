@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Builder
 public class RolesDTO {
 
     private Long id;
     private String name;
     private String description;
     private UserDTO userDTO;
+
 }
