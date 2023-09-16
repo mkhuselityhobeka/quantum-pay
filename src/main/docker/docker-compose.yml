@@ -1,0 +1,69 @@
+version: "3"
+
+services:
+#mysql setup
+  mysql:
+    build:
+      context: .
+      dockerfile: ./mysql/Dockerfile
+    environment:
+        - MYSQL_DATABASE=quantum-pay
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=admin
+        - MYSQL_ROOT_PASSWORD=admin
+    ports:
+      - 3306:3306
+    container_name: mysql-qpay
+    networks:
+      - elastic
+#QUANTUM PAY application setup
+  quantum-pay:
+    image: qpay:1.0.2
+    depends_on:
+      - mysql
+    ports:
+      - 8082:8082
+    expose:
+      - 8082
+    networks:
+      - elastic
+
+  #Elasticsearc setup
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - node.name=master
+      - cluster.name=qpay
+      - ELASTIC_PASSWORD=qpay123
+      - xpack.security.enabled=true
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+#kibana setup
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.12.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+volumes:
+    elasticsearch-data:
+      driver: local
+networks:
+    elastic:
+      driver: bridge

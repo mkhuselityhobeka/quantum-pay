@@ -9,14 +9,12 @@ import com.qpay.mapper.UserMapperImpl;
 import com.qpay.repository.RolesRepo;
 import com.qpay.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
-//import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -37,12 +35,12 @@ public class UserService{
     private UserMapperImpl userMapper;
 
     public UserService(UserRepo userRepo, User user, List<Roles>  roles,Roles role,
-                       UserMapperImpl userMapper,UserDTO userDTO,
+                     //  UserMapperImpl userMapper,UserDTO userDTO,
                        List<RolesDTO> rolesDTO,RolesDTO roleDTO,RolesRepo rolesRepo) {
         this.userRepo = userRepo;
         this.user = user;
         this.roles = roles;
-        this.userMapper = userMapper;
+      this.userMapper = userMapper;
         this.userDTO = userDTO;
         this.role = role;
         this.userDTO = userDTO;
@@ -64,7 +62,9 @@ public class UserService{
         rolesDTO = userMapper.RolesToRolesDTO(roles);
         userDTO = userMapper.UserToUserDTO(user);
         userDTO.setRolesDTO(rolesDTO);
+
         return userDTO;
+
     }
 
     //find user by username before create
@@ -84,13 +84,16 @@ public class UserService{
             throw new ResourceNotFoundException(User.class,"username", username);
 
         }
+
         roles = user.getRoles();
         rolesDTO = userMapper.RolesToRolesDTO(roles);
         userDTO = userMapper.UserToUserDTO(user);
         userDTO.setRolesDTO(rolesDTO);
+
         return userDTO;
 
     }
+
 
     public Page getAllUsers(Pageable pageable) {
         Page<User> users = userRepo.findAll(pageable);
@@ -103,17 +106,17 @@ public class UserService{
             if (dto == null) {
                 throw new ResourceNotFoundException(User.class,"username", dto.getUsername());
             }
-            user = userMapper.UserDTOtoUser(dto);
+        //    user = userMapper.UserDTOtoUser(dto);
             Optional<User> optionalUser = userRepo.findById(user.getId());
             if(optionalUser.isPresent()){
                 rolesDTO = dto.getRolesDTO();
-                roles = userMapper.RolesDTOtoRoles(rolesDTO);
+           //     roles = userMapper.RolesDTOtoRoles(rolesDTO);
                 user.setStatus(userDTO.getStatus());
                 roles.forEach(roles1 -> roles1.setUser(user));
                 roles.forEach(roles1 -> user.setRoles(roles));
                 user = userRepo.save(user);
             }
-            dto = userMapper.UserToUserDTO(user);
+         //   dto = userMapper.UserToUserDTO(user);
             dto.setRolesDTO(rolesDTO);
 
 
@@ -126,17 +129,17 @@ public class UserService{
         if (dto != null) {
             throw new ResourceNotFoundException(User.class,"username", dto.getUsername());
         }
-            user = userMapper.UserDTOtoUser(dto);
+          //  user = userMapper.UserDTOtoUser(dto);
             Optional<User> optionalUser = userRepo.findById(user.getId());
             if(optionalUser.isPresent()){
                 rolesDTO = dto.getRolesDTO();
-                roles = userMapper.RolesDTOtoRoles(rolesDTO);
+            //    roles = userMapper.RolesDTOtoRoles(rolesDTO);
                 user.setStatus(userDTO.getStatus());
                 roles.forEach(roles1 -> roles1.setUser(user));
                 roles.forEach(roles1 -> user.setRoles(roles));
                 user = userRepo.save(user);
             }
-            dto = userMapper.UserToUserDTO(user);
+        //    dto = userMapper.UserToUserDTO(user);
             dto.setRolesDTO(rolesDTO);
 
 
@@ -150,7 +153,7 @@ public class UserService{
 
                // log.debug("user dto " + userDTO);
                // log.debug("roles dto  " + userDTO.getRolesDTO());
-                roles = userMapper.RolesDTOtoRoles(userDTO.getRolesDTO());
+            //    roles = userMapper.RolesDTOtoRoles(userDTO.getRolesDTO());
                // log.debug("roles   " + roles.toString());
                User users  = userRepo.findByUsername(userDTO.getUsername());
               if(userRepo.findById(users.getId()).isPresent()){

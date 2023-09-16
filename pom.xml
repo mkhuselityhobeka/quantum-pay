@@ -18,7 +18,7 @@
 		<java.version>11</java.version>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 		<docker.image.prefix>qpay</docker.image.prefix>
-		<docker.image.tag>1.0.0</docker.image.tag>
+		<docker.image.tag>1.0.2</docker.image.tag>
 		<!--<spotify.version>1.2.2</spotify.version>-->
 		<fabric8.version>0.43.0</fabric8.version>
 		<p6spy.version>3.9.1</p6spy.version>
@@ -27,6 +27,9 @@
 		<mysql.version>8.0.15</mysql.version>
 		<rest-assured.version>5.3.1</rest-assured.version>
 		<testng.version>7.8.0</testng.version>
+		<aws-java-sdk-secretsmanager.version>1.12.486</aws-java-sdk-secretsmanager.version>
+		<aws-java-sdk-sts.version>1.12.492</aws-java-sdk-sts.version>
+		<springdoc.version>2.1.0</springdoc.version>
 	</properties>
 
 	<dependencyManagement>
@@ -130,6 +133,19 @@
 			<artifactId>p6spy</artifactId>
 			<version>${p6spy.version}</version>
 		</dependency>
+
+		<!-->aws secrets manager<-->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-secretsmanager</artifactId>
+			<version>${aws-java-sdk-secretsmanager.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-sts</artifactId>
+			<version>${aws-java-sdk-sts.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -180,7 +196,7 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>${fabric8.version}</version>
 				<configuration>
-					<dockerHost>tcp://localhost:2375</dockerHost>
+					<!--<dockerHost>tcp://localhost:2375</dockerHost>-->
 					<registry>registry.hub.docker.com/mkhuseli</registry>
 					<images>
 						<image>
@@ -191,15 +207,17 @@
 							</build>
 							<run>
 								<namingStrategy>alias</namingStrategy>
+								<dependsOn>
+									<container>mysql</container>
+								</dependsOn>
 								<ports>
 									<port>8082:8082</port>
 								</ports>
 							</run>
-
 						</image>
 					</images>
                    <authConfig>
-					   <username>mkhuseli</username>
+					   <username>mkhuselityhobeka@gmail.com</username>
 					   <password>mkhululityhobeka</password>
 				   </authConfig>
 					<!--<resources>
@@ -229,8 +247,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
-
 </project>

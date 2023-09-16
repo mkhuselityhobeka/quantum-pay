@@ -1,10 +1,9 @@
 server:
   port: 8080
-#H2
+#aws rds config
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/quantum-pay
+    url: jdbc:mysql://mysql:3306/quantum-pay
     username: root
     password: admin
   jpa:
@@ -13,6 +12,16 @@ spring:
       show-sql: true
       generate-ddl: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
+
+#aws secrets manager configs
+#aws:
+ # secrets-manager:
+ #   secret-id: AKIAYOCL6NLJUBM2JTRD
+  #  secret-key: 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
+   # roleArn: arn:aws:iam::579979864787:role/acbs-role
+    #region: eu-north-1
+    #secret-name: qpay-secret
+
 
 #logging
 logging:
